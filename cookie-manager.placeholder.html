@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="robots" content="noindex,nofollow" />
+        <title>Please confirm the usage of this third-party service</title>
+        <style type="text/css">
+            *,
+            *:before,
+            *:after {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                box-sizing: border-box;
+            }
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 100vh;
+                background: #eee;
+                font-size: 11px;
+                line-height: 16px;
+                padding: 20px;
+                text-align: center;
+                color: #333;
+                transition: 300ms opacity ease-in-out;
+                background-size: cover;
+            }
+            body.enabled {
+                opacity: 1;
+            }
+            p {
+                max-width: 300px;
+                margin-bottom: 10px;
+            }
+            a {
+                color: #333;
+            }
+            .btn {
+                background: transparent;
+                color: #333;
+                border: 2px solid #333;
+                padding: 10px 20px;
+                display: flex;
+                cursor: pointer;
+                display: inline-block;
+                margin-bottom: 10px;
+                transition: 300ms all ease-in-out;
+                position: relative;
+            }
+            body:hover .btn {
+                background: #333;
+                color: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        <span class="btn accept" data-key="{{key}}">{{name}}: akzeptieren</span>
+        <p><strong>Anbieter: {{provider}}</strong></p>
+        <p>{{desc}}</p>
+        <a href="{{policy}}" title="{{policy}}" target="_blank">{{policy}}</a>
+    </body>
+</html>

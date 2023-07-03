@@ -1,6 +1,6 @@
 ////
 ////    privacyControl - JS
-////    V 1.0 by Louis Mudrack
+////    V 1.1 by Louis Mudrack
 ////    06/30/2023
 ////
 ////////////////////
@@ -121,33 +121,121 @@ class privacyControl {
                 privacyLink.setAttribute("target", "_blank");
                 cmRow.appendChild(privacyLink);
                 // add functionality to checkbox
-                let elements = document.querySelectorAll(`iframe[data-cm-name="${name}"]`);
-                let inputField = document.getElementById(`privacy-ctrl:${name}`);
+                let elements = document.querySelectorAll(
+                    `iframe[data-cm-name="${name}"]`
+                );
+                let inputField = document.getElementById(
+                    `privacy-ctrl:${name}`
+                );
 
                 inputField.addEventListener("change", function () {
                     elements.forEach((ele) => {
                         if (inputField.checked) {
-                            ele.setAttribute("data-cm-accept", "true")
+                            ele.setAttribute("data-cm-accept", "true");
                         } else {
-                            ele.setAttribute("data-cm-accept", "false")
-                        };
+                            ele.setAttribute("data-cm-accept", "false");
+                            ele.setAttribute(
+                                "src",
+                                "/cookie-manager.placeholder.html"
+                            );
+                            ele.addEventListener("load", function () {
+                                ele.contentDocument.body.innerHTML =
+                                    ele.contentDocument.body.innerHTML.replace(
+                                        /{{key}}/g,
+                                        name
+                                    );
+                                ele.contentDocument.body.innerHTML =
+                                    ele.contentDocument.body.innerHTML.replace(
+                                        /{{name}}/g,
+                                        cookies[key][name].name
+                                    );
+                                ele.contentDocument.body.innerHTML =
+                                    ele.contentDocument.body.innerHTML.replace(
+                                        /{{provider}}/g,
+                                        cookies[key][name].provider
+                                    );
+                                ele.contentDocument.body.innerHTML =
+                                    ele.contentDocument.body.innerHTML.replace(
+                                        /{{desc}}/g,
+                                        cookies[key][name].lang
+                                    );
+                                ele.contentDocument.body.innerHTML =
+                                    ele.contentDocument.body.innerHTML.replace(
+                                        /{{policy}}/g,
+                                        cookies[key][name].privacy
+                                    );
+                            });
+                        }
                         if (ele.getAttribute("data-cm-accept") == "true") {
                             const src = ele.getAttribute("data-cm-src");
                             ele.setAttribute("src", src);
-                            document.cookie = `${name}=accepted`
+                            document.cookie = `${name}=accepted`;
                         } else {
-                            ele.setAttribute("src", "");
-                            document.cookie = `${name}=denied`
+                            ele.setAttribute(
+                                "src",
+                                "/cookie-manager.placeholder.html"
+                            );
+                            document.cookie = `${name}=denied`;
                         }
                     });
                 });
-                if (document.cookie.includes(`${name}=accepted`) === true) {
-                    inputField.checked = true;
-                    inputField.dispatchEvent(new Event("change"))
-                } else {
-                    inputField.checked = false;
-                    inputField.dispatchEvent(new Event("change"))
-                }
+                elements.forEach((ele) => {
+                    if (document.cookie.includes(`${name}=accepted`) === true) {
+                        inputField.checked = true;
+                        inputField.dispatchEvent(new Event("change"));
+                    } else {
+                        inputField.checked = false;
+                        inputField.dispatchEvent(new Event("change"));
+                    }
+                    if (ele.getAttribute("data-cm-accept") === "false") {
+                        ele.setAttribute(
+                            "src",
+                            "/cookie-manager.placeholder.html"
+                        );
+                        ele.addEventListener("load", function () {
+                            ele.contentDocument.body.innerHTML =
+                                ele.contentDocument.body.innerHTML.replace(
+                                    /{{key}}/g,
+                                    name
+                                );
+                            ele.contentDocument.body.innerHTML =
+                                ele.contentDocument.body.innerHTML.replace(
+                                    /{{name}}/g,
+                                    cookies[key][name].name
+                                );
+                            ele.contentDocument.body.innerHTML =
+                                ele.contentDocument.body.innerHTML.replace(
+                                    /{{provider}}/g,
+                                    cookies[key][name].provider
+                                );
+                            ele.contentDocument.body.innerHTML =
+                                ele.contentDocument.body.innerHTML.replace(
+                                    /{{desc}}/g,
+                                    cookies[key][name].lang
+                                );
+                            ele.contentDocument.body.innerHTML =
+                                ele.contentDocument.body.innerHTML.replace(
+                                    /{{policy}}/g,
+                                    cookies[key][name].privacy
+                                );
+                            let button = ele.contentDocument.querySelectorAll(
+                                `span[data-key="${name}"]`
+                            );
+                            console.log(button);
+                            button.forEach((btn) => {
+                                btn.addEventListener("click", function () {
+                                    const src = ele.getAttribute("data-cm-src");
+                                    ele.setAttribute("src", src);
+                                    document.cookie = `${name}=accepted`;
+                                    inputField.checked = true;
+                                    inputField.dispatchEvent(
+                                        new Event("change")
+                                    );
+                                });
+                            });
+                        });
+                    }
+                });
             }
         }
     }
