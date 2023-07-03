@@ -1,6 +1,6 @@
 ////
 ////    privacyControl - JS
-////    V 1.1 by Louis Mudrack
+////    V 1.1.1 by Louis Mudrack
 ////    06/30/2023
 ////
 ////////////////////
@@ -139,6 +139,7 @@ class privacyControl {
                                 "/cookie-manager.placeholder.html"
                             );
                             ele.addEventListener("load", function () {
+                                if (ele.src.startsWith(window.location.origin)) {
                                 ele.contentDocument.body.innerHTML =
                                     ele.contentDocument.body.innerHTML.replace(
                                         /{{key}}/g,
@@ -164,6 +165,21 @@ class privacyControl {
                                         /{{policy}}/g,
                                         cookies[key][name].privacy
                                     );
+                                    let button = ele.contentDocument.querySelectorAll(
+                                        `span[data-key="${name}"]`
+                                    );
+                                    button.forEach((btn) => {
+                                        btn.addEventListener("click", function () {
+                                            const src = ele.getAttribute("data-cm-src");
+                                            ele.setAttribute("src", src);
+                                            document.cookie = `${name}=accepted`;
+                                            inputField.checked = true;
+                                            inputField.dispatchEvent(
+                                                new Event("change")
+                                            );
+                                        });
+                                    });
+                                }
                             });
                         }
                         if (ele.getAttribute("data-cm-accept") == "true") {
@@ -193,6 +209,7 @@ class privacyControl {
                             "/cookie-manager.placeholder.html"
                         );
                         ele.addEventListener("load", function () {
+                            if (ele.src.startsWith(window.location.origin)) {
                             ele.contentDocument.body.innerHTML =
                                 ele.contentDocument.body.innerHTML.replace(
                                     /{{key}}/g,
@@ -221,7 +238,6 @@ class privacyControl {
                             let button = ele.contentDocument.querySelectorAll(
                                 `span[data-key="${name}"]`
                             );
-                            console.log(button);
                             button.forEach((btn) => {
                                 btn.addEventListener("click", function () {
                                     const src = ele.getAttribute("data-cm-src");
@@ -233,6 +249,7 @@ class privacyControl {
                                     );
                                 });
                             });
+                        }
                         });
                     }
                 });
