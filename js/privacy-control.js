@@ -1,7 +1,7 @@
 ////
 ////    privacyControl - JS
-////    V 1.1.1 by Louis Mudrack
-////    06/30/2023
+////    V 1.1.2 by Louis Mudrack
+////    07/04/2023
 ////
 ////////////////////
 
@@ -127,6 +127,12 @@ class privacyControl {
                 let inputField = document.getElementById(
                     `privacy-ctrl:${name}`
                 );
+                if (document.cookie.includes(`${name}=accepted`) === true) {
+                    inputField.checked = true;
+                } else {
+                    inputField.checked = false;
+                }
+                inputField.dispatchEvent(new Event("change"));
 
                 inputField.addEventListener("change", function () {
                     elements.forEach((ele) => {
@@ -172,7 +178,7 @@ class privacyControl {
                                         btn.addEventListener("click", function () {
                                             const src = ele.getAttribute("data-cm-src");
                                             ele.setAttribute("src", src);
-                                            document.cookie = `${name}=accepted`;
+                                            document.cookie = `${name}=accepted; path=/`;
                                             inputField.checked = true;
                                             inputField.dispatchEvent(
                                                 new Event("change")
@@ -185,24 +191,23 @@ class privacyControl {
                         if (ele.getAttribute("data-cm-accept") == "true") {
                             const src = ele.getAttribute("data-cm-src");
                             ele.setAttribute("src", src);
-                            document.cookie = `${name}=accepted`;
+                            document.cookie = `${name}=accepted; path=/`;
                         } else {
                             ele.setAttribute(
                                 "src",
                                 "/cookie-manager.placeholder.html"
                             );
-                            document.cookie = `${name}=denied`;
+                            document.cookie = `${name}=denied; path=/`;
                         }
                     });
                 });
                 elements.forEach((ele) => {
                     if (document.cookie.includes(`${name}=accepted`) === true) {
                         inputField.checked = true;
-                        inputField.dispatchEvent(new Event("change"));
                     } else {
                         inputField.checked = false;
-                        inputField.dispatchEvent(new Event("change"));
                     }
+                    inputField.dispatchEvent(new Event("change"));
                     if (ele.getAttribute("data-cm-accept") === "false") {
                         ele.setAttribute(
                             "src",
@@ -242,7 +247,7 @@ class privacyControl {
                                 btn.addEventListener("click", function () {
                                     const src = ele.getAttribute("data-cm-src");
                                     ele.setAttribute("src", src);
-                                    document.cookie = `${name}=accepted`;
+                                    document.cookie = `${name}=accepted; path=/`;
                                     inputField.checked = true;
                                     inputField.dispatchEvent(
                                         new Event("change")
