@@ -1,4 +1,4 @@
-new privacyControl({
+new PrivacyControl({
     cookies: {
         googlemaps: {
             name: "YouTube",
