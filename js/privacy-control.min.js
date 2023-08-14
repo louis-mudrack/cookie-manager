@@ -1,8 +1,8 @@
 ////
 ////    privacyControl - JS
 ////    Author: Louis Mudrack
-////    Version: 1.2
-////    Date released: 07/27/2023
+////    Version: 1.3
+////    Date released: 08/14/2023
 ////
 ////////////////////
 
