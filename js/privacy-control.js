@@ -224,7 +224,7 @@ class PrivacyControl {
               document.cookie = `${name}=accepted; path=/`;
             } else {
               ele.setAttribute('data-cm-accept', 'false');
-              ele.setAttribute('src', '/cookie-manager.placeholder.html');
+              ele.setAttribute('src', 'cookie-manager.placeholder.html');
               document.cookie = `${name}=denied; path=/`;
             }
           });
@@ -238,7 +238,7 @@ class PrivacyControl {
           }
           inputField.dispatchEvent(new Event('change'));
           if (ele.getAttribute('data-cm-accept') === 'false') {
-            ele.setAttribute('src', '/cookie-manager.placeholder.html');
+            ele.setAttribute('src', 'cookie-manager.placeholder.html');
             ele.addEventListener('load', () => {
               if (ele.src.startsWith(window.location.origin)) {
                 ele.contentDocument.body.innerHTML =
