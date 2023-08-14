@@ -1,14 +1,14 @@
 ////
 ////    privacyControl - JS
-////    V 1.2.1 by Louis Mudrack
-////    07/27/2023
+////    Author: Louis Mudrack
+////    Version: 1.2
+////    Date released: 07/27/2023
 ////
 ////////////////////
 
 const cmToggle = {
   elementName: 'cookie-manager-toggler',
   className: 'closed',
-  textContent: 'Manage Cookies',
 };
 const cmParent = {
   elementName: 'cookie-manager',
@@ -16,23 +16,15 @@ const cmParent = {
 
 const cmChilds = [
   {
+    elementName: 'cm-heading',
+    textContent: 'Manage Cookies',
+  },
+  {
     elementName: 'cm-close',
     textContent: 'X',
   },
   {
-    elementName: 'cm-info',
-    childElements: [
-      {
-        elementName: 'cm-text',
-        textContent:
-          'Diese Website nutzt Cookies oder Drittanbieterdienste nur mit Ihrem Einverständnis - jederzeit wiederruflich und freiwillig!',
-      },
-      { elementName: 'cm-buttons', textContent: 'Alle akzeptieren' },
-    ],
-  },
-  { elementName: 'cm-body' },
-  {
-    elementName: 'cm-footer',
+    elementName: 'cm-essentials',
     childElements: [
       {
         elementName: 'a',
@@ -49,6 +41,18 @@ const cmChilds = [
         className: 'privacy',
         textContent: 'Datenschutz',
       },
+    ],
+  },
+  { elementName: 'cm-body' },
+  {
+    elementName: 'cm-footer',
+    childElements: [
+      {
+        elementName: 'cm-text',
+        textContent:
+          'Diese Website nutzt Cookies oder Drittanbieterdienste nur mit Ihrem Einverständnis - jederzeit wiederruflich und freiwillig!',
+      },
+      { elementName: 'cm-buttons', textContent: 'Alle akzeptieren' },
     ],
   },
 ];
@@ -132,18 +136,21 @@ class PrivacyControl {
         this.deps.push(newCookies);
       }
       for (const name in cookies[key]) {
-        const cmRow = document.createElement('cm-row');
-        this.cmBody.appendChild(cmRow);
+        const cmCat = document.createElement('cm-category');
+        this.cmBody.appendChild(cmCat);
 
         // Accept cookies checkbox
+        const r1 = document.createElement('cm-row');
         const acceptLabel = document.createElement('label');
+        acceptLabel.textContent = 'Akzeptieren:';
         acceptLabel.setAttribute('for', `privacy-ctrl:${name}`);
         const accept = document.createElement('input');
         accept.setAttribute('type', 'checkbox');
         accept.setAttribute('id', `privacy-ctrl:${name}`);
         accept.setAttribute('name', `${name}`);
         acceptLabel.appendChild(accept);
-        cmRow.appendChild(acceptLabel);
+        r1.appendChild(acceptLabel);
+        cmCat.appendChild(r1);
         const acceptAll = document.querySelector('cm-buttons');
         acceptAll.addEventListener('click', () => {
           const checkboxes = document.querySelectorAll('input[type=checkbox]');
@@ -154,40 +161,49 @@ class PrivacyControl {
         });
 
         // Name
+        const r2 = document.createElement('cm-row');
         const cookieName = document.createElement('p');
         cookieName.textContent = 'Name:';
-        cmRow.appendChild(cookieName);
+        r2.appendChild(cookieName);
         const cookie = document.createElement('p');
         cookie.textContent = cookies[key][name].name;
-        cmRow.appendChild(cookie);
+        r2.appendChild(cookie);
+        cmCat.appendChild(r2);
 
         // Provider
+        const r3 = document.createElement('cm-row');
         const AnbieterH = document.createElement('p');
         AnbieterH.textContent = 'Anbieter:';
-        cmRow.appendChild(AnbieterH);
+        r3.appendChild(AnbieterH);
         const Anbieter = document.createElement('p');
         Anbieter.textContent = cookies[key][name].provider;
-        cmRow.appendChild(Anbieter);
+        r3.appendChild(Anbieter);
+        cmCat.appendChild(r3);
 
         // Usecase
+        const r4 = document.createElement('cm-row');
         const Verwendungszweck = document.createElement('p');
         Verwendungszweck.textContent = 'Verwendungszweck:';
-        cmRow.appendChild(Verwendungszweck);
+        r4.appendChild(Verwendungszweck);
         const lang = document.createElement('p');
         lang.textContent = cookies[key][name].lang;
-        cmRow.appendChild(lang);
+        r4.appendChild(lang);
+        cmCat.appendChild(r4);
 
         // privacy-policy link
+        const r5 = document.createElement('cm-row');
         const privacy = document.createElement('p');
         privacy.textContent = 'Datenschutz:';
-        cmRow.appendChild(privacy);
+        r5.appendChild(privacy);
+        cmCat.appendChild(r5);
         const privacyLink = document.createElement('a');
         privacyLink.textContent = 'Link';
         privacyLink.setAttribute('href', cookies[key][name].privacy);
         privacyLink.setAttribute('title', cookies[key][name].privacy);
         privacyLink.setAttribute('target', '_blank');
-        cmRow.appendChild(privacyLink);
-        const links = document.querySelectorAll('cm-footer a');
+        r5.appendChild(privacyLink);
+        cmCat.appendChild(r5);
+        const links = document.querySelectorAll('cm-essentials a');
         links.forEach((link) => {
           if (link.classList.contains('reset')) {
             link.addEventListener('click', () => {
