@@ -113,6 +113,9 @@ cookie-manager {
       padding: 1rem 0;
       display: block;
       border-bottom: 2px solid white;
+      &:last-of-type {
+        border-bottom: none;
+      }
       & cm-row {
         width: 100%;
         height: 100%;
@@ -153,18 +156,23 @@ cookie-manager {
       display: block;
       background-color: var(--primary-color);
       padding: 0.5rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
     & cm-text {
       display: block;
       font-size: 12px;
-      margin-bottom: 0.5rem;
+      width: 50%;
     }
     & cm-buttons {
       display: block;
       text-align: center;
-      padding: 0.5rem;
+      padding: 1rem;
+      border-radius: 10px;
       background-color: var(--button-color);
       cursor: pointer;
+      width: 50%;
     }
   }
 }
